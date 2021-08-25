@@ -56,15 +56,20 @@ export const hydrate = ((...args) => {
   ensureHydrationRenderer().hydrate(...args)
 }) as RootHydrateFunction
 
+// 返回一个提供应用上下文的应用实例
+// 应用实例挂载的整个组件树共享同一个上下文
 export const createApp = ((...args) => {
-  const app = ensureRenderer().createApp(...args)
+  const renderer = ensureRenderer()
+  const app = renderer.createApp(...args)
 
   if (__DEV__) {
+    // 开发环境，修改app.config.isNativeTag为(tag) => isHTMLTag(tag) || isSVGTag(tag)
     injectNativeTagCheck(app)
     injectCompilerOptionsCheck(app)
   }
 
   const { mount } = app
+  // 重写app的mount方法
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
     const container = normalizeContainer(containerOrSelector)
     if (!container) return

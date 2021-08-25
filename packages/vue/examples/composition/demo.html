@@ -3,12 +3,12 @@
 <div id="root"></div>
 
 <script>
-  const { createApp, ref, h, onBeforeMount } = Vue
+  const { createApp, ref, h, onBeforeMount, onMounted, inject } = Vue
 
-  debugger
   const app = createApp(
     {
       setup() {
+        const user = inject('user')
         const count = ref(0)
         const add = () => {
           count.value++
@@ -24,11 +24,11 @@
 
         return () =>
           h(
-            'button',
+            'Test',
             {
               onClick: add
             },
-            `count is: ${count.value}`
+            `count is: ${count.value} ${user}`
           )
       }
     },
@@ -37,5 +37,37 @@
     }
   )
 
+  // debugger;
+  // app.component('Node', {
+  //   render() {
+  //     return h('div', {}, 'node')
+  //   }
+  // })
+
+  // debugger;
+  // app.mixin({
+  //   data() {
+  //     return {
+  //       x: 1
+  //     }
+  //   }
+  // })
+
+  // debugger
+  app.provide('user', 'administrator')
+
+  // debugger
+  app.use({
+    install(app) {
+      console.log(app, '11')
+    }
+  })
+
+  // debugger
   app.mount('#root')
+
+  // setTimeout(() => {
+  //   debugger;
+  //   app.unmount()
+  // }, 3000)
 </script>

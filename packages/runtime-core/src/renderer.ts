@@ -2313,6 +2313,7 @@ function baseCreateRenderer(
   const render: RootRenderFunction = (vnode, container, isSVG) => {
     if (vnode == null) {
       if (container._vnode) {
+        // 卸载组件
         unmount(container._vnode, null, null, true)
       }
     } else {
