@@ -1,0 +1,41 @@
+<script src="../../dist/vue.global.js"></script>
+
+<div id="root"></div>
+
+<script>
+  const { createApp, ref, h, onBeforeMount } = Vue
+
+  debugger
+  const app = createApp(
+    {
+      setup() {
+        const count = ref(0)
+        const add = () => {
+          count.value++
+        }
+
+        onBeforeMount(() => {
+          console.log('BeforeMount')
+        })
+
+        onMounted(() => {
+          console.log('Mounted')
+        })
+
+        return () =>
+          h(
+            'button',
+            {
+              onClick: add
+            },
+            `count is: ${count.value}`
+          )
+      }
+    },
+    {
+      x: 1
+    }
+  )
+
+  app.mount('#root')
+</script>
