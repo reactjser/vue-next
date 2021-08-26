@@ -11,17 +11,45 @@
     h,
     onBeforeMount,
     onMounted,
-    inject
+    inject,
+    resolveComponent,
+    resolveDynamicComponent,
+    createRenderer,
+    nextTick,
+    mergeProps,
+    useCssModule,
+    version,
   } = Vue
+
+  // debugger
+  // const t = mergeProps(
+  //   {
+  //     x: 1,
+  //     z: 'z'
+  //   },
+  //   {
+  //     x: 2,
+  //     y: 3
+  //   }
+  // )
+  // console.log(t)
 
   const App = defineComponent({
     props: ['x'],
     setup(props) {
       const user = inject('user')
       const count = ref(0)
-      const add = () => {
+      const el = ref(null)
+      const add = async () => {
         count.value++
+        console.log(el.value.innerHTML)
+        // debugger
+        await nextTick()
+        console.log(el.value.innerHTML)
       }
+      // debugger;
+      const style = useCssModule();
+      console.log(style)
 
       onBeforeMount(() => {
         console.log('BeforeMount')
@@ -32,13 +60,22 @@
       })
 
       return () => {
+        const SyncComp = resolveComponent('sync-component')
+        // debugger;
+        const AsyncComp = resolveDynamicComponent('async-component')
+
         return h(
-          'Test',
+          'button',
           {
-            onClick: add
+            ref: el,
+            onClick: add,
+            class: style.success
           },
-          // '888'
-          [`count is: ${count.value} ${user} ${props.x}`, h(AsyncComp)]
+          [
+            `count is: ${count.value} ${user} ${props.x}`,
+            h(SyncComp),
+            h(AsyncComp)
+          ]
         )
       }
     }
@@ -66,11 +103,11 @@
   app.component('async-component', AsyncComp)
 
   // debugger;
-  // app.component('Node', {
-  //   render() {
-  //     return h('div', {}, 'node')
-  //   }
-  // })
+  app.component('sync-component', {
+    render() {
+      return h('div', {}, 'node')
+    }
+  })
 
   // debugger;
   // app.mixin({
@@ -92,6 +129,14 @@
   })
 
   // debugger
+  // const render = createRenderer({})
+  // console.log(render, 'render')
+
+
+  debugger
+  version
+
+  // debugger
   app.mount('#root')
 
   // setTimeout(() => {
@@ -99,3 +144,9 @@
   //   app.unmount()
   // }, 3000)
 </script>
+
+<style type="module">
+  .success {
+    color: #090;
+  }
+</style>

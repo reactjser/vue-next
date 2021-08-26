@@ -16,6 +16,8 @@ export const FILTERS = 'filters'
 
 export type AssetTypes = typeof COMPONENTS | typeof DIRECTIVES | typeof FILTERS
 
+// 根据组件的名称解析组件
+// 返回一个 Component。如果没有找到，则返回接收的参数 name
 /**
  * @private
  */
@@ -33,6 +35,7 @@ export const NULL_DYNAMIC_COMPONENT = Symbol()
  */
 export function resolveDynamicComponent(component: unknown): VNodeTypes {
   if (isString(component)) {
+    // 第三个参数为false，当找不到异步组件时，不提示warning
     return resolveAsset(COMPONENTS, component, false) || component
   } else {
     // invalid types will fallthrough to createVNode and raise warning
@@ -84,6 +87,7 @@ function resolveAsset(
   if (instance) {
     const Component = instance.type
 
+    // 判断组件是不是自身
     // explicit self name has highest priority
     if (type === COMPONENTS) {
       const selfName = getComponentName(Component)
@@ -98,9 +102,11 @@ function resolveAsset(
     }
 
     const res =
+      // 在本地注册的组件上面找
       // local registration
       // check instance[type] first which is resolved for options API
       resolve(instance[type] || (Component as ComponentOptions)[type], name) ||
+      // 在全局注册的组件上面找
       // global registration
       resolve(instance.appContext[type], name)
 

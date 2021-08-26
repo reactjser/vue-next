@@ -287,6 +287,9 @@ export const queuePostRenderEffect = __FEATURE_SUSPENSE__
   ? queueEffectWithSuspense
   : queuePostFlushCb
 
+// 自定义渲染器，接收两个参数：
+// HostNode: 宿主环境中的节点
+// HostElement: 宿主环境中的元素
 /**
  * The createRenderer function accepts two generic arguments:
  * HostNode and HostElement, corresponding to Node and Element types in the

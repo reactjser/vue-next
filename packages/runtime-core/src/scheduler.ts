@@ -55,6 +55,7 @@ let currentPreFlushParentJob: SchedulerJob | null = null
 const RECURSION_LIMIT = 100
 type CountMap = Map<SchedulerJob, number>
 
+// 将回调推迟到下一个 DOM 更新周期之后执行
 export function nextTick<T = void>(
   this: T,
   fn?: (this: T) => void
@@ -128,10 +129,7 @@ function queueCb(
   if (!isArray(cb)) {
     if (
       !activeQueue ||
-      !activeQueue.includes(
-        cb,
-        cb.allowRecurse ? index + 1 : index
-      )
+      !activeQueue.includes(cb, cb.allowRecurse ? index + 1 : index)
     ) {
       pendingQueue.push(cb)
     }

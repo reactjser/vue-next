@@ -777,6 +777,7 @@ export function normalizeChildren(vnode: VNode, children: unknown) {
   vnode.shapeFlag |= type
 }
 
+// 合并props，对class、style和事件监听器做标准化处理
 export function mergeProps(...args: (Data & VNodeProps)[]) {
   const ret: Data = {}
   for (let i = 0; i < args.length; i++) {
