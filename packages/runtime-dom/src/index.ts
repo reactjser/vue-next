@@ -59,6 +59,8 @@ export const hydrate = ((...args) => {
 // 返回一个提供应用上下文的应用实例
 // 应用实例挂载的整个组件树共享同一个上下文
 export const createApp = ((...args) => {
+  // args: [根组件选项对象]
+  // args: [根组件选项对象, 根组件props]
   const renderer = ensureRenderer()
   const app = renderer.createApp(...args)
 

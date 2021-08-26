@@ -181,5 +181,12 @@ export function defineComponent<
 
 // implementation, close to no-op
 export function defineComponent(options: unknown) {
+  // 如果是一个 setup 函数，函数名称将作为组件名称来使用,如：
+  // const HelloWorld = defineComponent(function HelloWorld() {
+  //   const count = ref(0)
+  //   return { count }
+  // })
+  // 否则，直接返回传递给它的对象
+  // 主要是为了更好的TS支持
   return isFunction(options) ? { setup: options, name: options.name } : options
 }

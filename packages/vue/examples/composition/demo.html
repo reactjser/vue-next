@@ -3,39 +3,67 @@
 <div id="root"></div>
 
 <script>
-  const { createApp, ref, h, onBeforeMount, onMounted, inject } = Vue
+  const {
+    defineAsyncComponent,
+    defineComponent,
+    createApp,
+    ref,
+    h,
+    onBeforeMount,
+    onMounted,
+    inject
+  } = Vue
 
-  const app = createApp(
-    {
-      setup() {
-        const user = inject('user')
-        const count = ref(0)
-        const add = () => {
-          count.value++
-        }
-
-        onBeforeMount(() => {
-          console.log('BeforeMount')
-        })
-
-        onMounted(() => {
-          console.log('Mounted')
-        })
-
-        return () =>
-          h(
-            'Test',
-            {
-              onClick: add
-            },
-            `count is: ${count.value} ${user}`
-          )
+  const App = defineComponent({
+    props: ['x'],
+    setup(props) {
+      const user = inject('user')
+      const count = ref(0)
+      const add = () => {
+        count.value++
       }
-    },
-    {
-      x: 1
+
+      onBeforeMount(() => {
+        console.log('BeforeMount')
+      })
+
+      onMounted(() => {
+        console.log('Mounted')
+      })
+
+      return () => {
+        return h(
+          'Test',
+          {
+            onClick: add
+          },
+          // '888'
+          [`count is: ${count.value} ${user} ${props.x}`, h(AsyncComp)]
+        )
+      }
     }
+  })
+
+  const app = createApp(App, {
+    x: 1
+  })
+
+  // debugger;
+  const AsyncComp = defineAsyncComponent(
+    () =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({
+            name: 'haha',
+            render() {
+              return h('div', {}, 'haha')
+            }
+          })
+        }, 1000)
+      })
   )
+
+  app.component('async-component', AsyncComp)
 
   // debugger;
   // app.component('Node', {
