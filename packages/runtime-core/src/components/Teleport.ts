@@ -76,6 +76,7 @@ export const TeleportImpl = {
     optimized: boolean,
     internals: RendererInternals
   ) {
+    debugger
     const {
       mc: mountChildren,
       pc: patchChildren,
@@ -94,6 +95,7 @@ export const TeleportImpl = {
     }
 
     if (n1 == null) {
+      // 挂载内容
       // insert anchors in the main view
       const placeholder = (n2.el = __DEV__
         ? createComment('teleport start')
@@ -136,6 +138,7 @@ export const TeleportImpl = {
         mount(target, targetAnchor)
       }
     } else {
+      // 更新内容
       // update content
       n2.el = n1.el
       const mainAnchor = (n2.anchor = n1.anchor)!

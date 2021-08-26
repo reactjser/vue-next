@@ -19,6 +19,8 @@
     mergeProps,
     useCssModule,
     version,
+    KeepAlive,
+    Teleport
   } = Vue
 
   // debugger
@@ -48,7 +50,7 @@
         console.log(el.value.innerHTML)
       }
       // debugger;
-      const style = useCssModule();
+      const style = useCssModule()
       console.log(style)
 
       onBeforeMount(() => {
@@ -65,17 +67,21 @@
         const AsyncComp = resolveDynamicComponent('async-component')
 
         return h(
-          'button',
-          {
-            ref: el,
-            onClick: add,
-            class: style.success
-          },
-          [
-            `count is: ${count.value} ${user} ${props.x}`,
-            h(SyncComp),
-            h(AsyncComp)
-          ]
+          KeepAlive,
+          {},
+          h(
+            'button',
+            {
+              ref: el,
+              onClick: add,
+              class: style.success
+            },
+            [
+              `count is: ${count.value} ${user} ${props.x}`,
+              h(SyncComp),
+              h(AsyncComp)
+            ]
+          )
         )
       }
     }
@@ -90,10 +96,13 @@
     () =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
+          console.log(Teleport)
           resolve({
-            name: 'haha',
+            name: 'modal',
             render() {
-              return h('div', {}, 'haha')
+              return h(Teleport, {
+                to: 'body'
+              }, 'modal content')
             }
           })
         }, 1000)
@@ -131,10 +140,6 @@
   // debugger
   // const render = createRenderer({})
   // console.log(render, 'render')
-
-
-  debugger
-  version
 
   // debugger
   app.mount('#root')

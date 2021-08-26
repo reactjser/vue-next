@@ -80,6 +80,7 @@ const KeepAliveImpl: ComponentOptions = {
   },
 
   setup(props: KeepAliveProps, { slots }: SetupContext) {
+    // debugger;
     const instance = getCurrentInstance()!
     // KeepAlive communicates with the instantiated renderer via the
     // ctx where the renderer passes in its internals,
@@ -205,6 +206,7 @@ const KeepAliveImpl: ComponentOptions = {
       { flush: 'post', deep: true }
     )
 
+    // 渲染之后缓存子树
     // cache sub tree after render
     let pendingCacheKey: CacheKey | null = null
     const cacheSubtree = () => {
