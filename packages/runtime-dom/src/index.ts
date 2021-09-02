@@ -24,10 +24,12 @@ declare module '@vue/reactivity' {
   }
 }
 
+// 渲染相关的一些配置，比如更新属性的方法，操作 DOM 的方法
 const rendererOptions = extend({ patchProp }, nodeOps)
 
 // lazy create the renderer - this makes core renderer logic tree-shakable
 // in case the user only imports reactivity utilities from Vue.
+// 延时创建渲染器，当用户只依赖响应式包的时候，可以通过 tree-shaking 移除核心渲染逻辑相关的代码
 let renderer: Renderer<Element | ShadowRoot> | HydrationRenderer
 
 let enabledHydration = false
@@ -57,7 +59,10 @@ export const hydrate = ((...args) => {
 }) as RootHydrateFunction
 
 export const createApp = ((...args) => {
-  const app = ensureRenderer().createApp(...args)
+  // 创建渲染器对象: { render, hydrate, createApp }
+  const renderer = ensureRenderer()
+  // 创建 app 对象
+  const app = renderer.createApp(...args)
 
   if (__DEV__) {
     injectNativeTagCheck(app)
@@ -65,11 +70,14 @@ export const createApp = ((...args) => {
   }
 
   const { mount } = app
+  // 重写 mount 方法
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
+    // 标准化容器
     const container = normalizeContainer(containerOrSelector)
     if (!container) return
 
     const component = app._component
+    // 如组件对象没有定义 render 函数和 template 模板，则取容器的 innerHTML 作为组件模板内容
     if (!isFunction(component) && !component.render && !component.template) {
       // __UNSAFE__
       // Reason: potential execution of JS expressions in in-DOM template.
@@ -92,7 +100,9 @@ export const createApp = ((...args) => {
     }
 
     // clear content before mounting
+    // 挂载前清空容器内容
     container.innerHTML = ''
+    // 真正的挂载
     const proxy = mount(container, false, container instanceof SVGElement)
     if (container instanceof Element) {
       container.removeAttribute('v-cloak')

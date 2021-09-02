@@ -345,6 +345,7 @@ export function isSameVNodeType(n1: VNode, n2: VNode): boolean {
     // HMR only: if the component has been hot-updated, force a reload.
     return false
   }
+  // n1 和 n2 节点的 type 和 key 都相同，才是相同节点
   return n1.type === n2.type && n1.key === n2.key
 }
 
@@ -429,6 +430,7 @@ function createBaseVNode(
   } as VNode
 
   if (needFullChildrenNormalization) {
+    // 标准化子节点，把不同数据类型的 children 转成数组或者文本类型
     normalizeChildren(vnode, children)
     // normalize suspense children
     if (__FEATURE_SUSPENSE__ && shapeFlag & ShapeFlags.SUSPENSE) {
@@ -518,6 +520,7 @@ function _createVNode(
   }
 
   // class & style normalization.
+  // 处理 props 相关逻辑，标准化 class 和 style
   if (props) {
     // for reactive or proxy objects, we need to clone it to enable mutation.
     props = guardReactiveProps(props)!

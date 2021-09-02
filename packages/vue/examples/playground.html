@@ -3,13 +3,25 @@
 <div id="root"></div>
 
 <script>
-  const { defineComponent, createApp, h } = Vue
+  const { createApp, ref, h } = Vue
 
-  const App = defineComponent({
+  const App = {
     setup() {
-      return () => h('div', {}, 'hello vue3')
+      const count = ref(0)
+      const add = () => {
+        count.value++
+      }
+
+      return () =>
+        h(
+          'button',
+          {
+            onClick: add,
+          },
+          count.value
+        )
     }
-  })
+  }
 
   const app = createApp(App)
   app.mount('#root')
