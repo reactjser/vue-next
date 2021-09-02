@@ -3,23 +3,30 @@
 <div id="root"></div>
 
 <script>
-  const { createApp, ref, h } = Vue
+  const { createApp, reactive, computed, h } = Vue
 
   const App = {
     setup() {
-      const count = ref(0)
-      const add = () => {
-        count.value++
+      const state = reactive({
+        count: 0,
+        double: computed(() => state.count * 2)
+      })
+      function increment() {
+        state.count++
       }
-
-      return () =>
-        h(
-          'button',
-          {
-            onClick: add,
-          },
-          count.value
-        )
+      return {
+        state,
+        increment
+      }
+    },
+    render() {
+      return h(
+        'button',
+        {
+          onClick: this.increment
+        },
+        `Count is: ${this.state.count}, double is: ${this.state.double}`
+      )
     }
   }
 

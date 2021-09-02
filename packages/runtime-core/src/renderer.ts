@@ -1231,7 +1231,7 @@ function baseCreateRenderer(
     // mounting
     const compatMountInstance =
       __COMPAT__ && initialVNode.isCompatRoot && initialVNode.component
-    // 创建组件实例
+    // 1. 创建组件实例
     const instance: ComponentInternalInstance =
       compatMountInstance ||
       (initialVNode.component = createComponentInstance(
@@ -1259,7 +1259,7 @@ function baseCreateRenderer(
       if (__DEV__) {
         startMeasure(instance, `init`)
       }
-      // 设置组件实例
+      // 2. 设置组件实例
       setupComponent(instance)
       if (__DEV__) {
         endMeasure(instance, `init`)
@@ -1280,7 +1280,7 @@ function baseCreateRenderer(
       return
     }
 
-    // 设置并运行带副作用的渲染函数
+    // 3. 设置并运行带副作用的渲染函数
     setupRenderEffect(
       instance,
       initialVNode,
@@ -1494,7 +1494,7 @@ function baseCreateRenderer(
         // This is triggered by mutation of component's own state (next: null)
         // OR parent calling processComponent (next: VNode)
         // 更新组件
-        debugger
+        // debugger
         let { next, bu, u, parent, vnode } = instance
         let originNext = next
         let vnodeHook: VNodeHook | null | undefined
