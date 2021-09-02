@@ -1,0 +1,16 @@
+<script src="../dist/vue.global.js"></script>
+
+<div id="root"></div>
+
+<script>
+  const { defineComponent, createApp, h } = Vue
+
+  const App = defineComponent({
+    setup() {
+      return () => h('div', {}, 'hello vue3')
+    }
+  })
+
+  const app = createApp(App)
+  app.mount('#root')
+</script>
