@@ -3,14 +3,15 @@
 <div id="root"></div>
 
 <script>
-  const { createApp, reactive, computed, h } = Vue
+  const { createApp, reactive, h } = Vue
 
   const App = {
     setup() {
       const state = reactive({
         count: 0,
-        double: computed(() => state.count * 2)
+        arr: [1, 2, 3]
       })
+
       function increment() {
         state.count++
       }
@@ -25,7 +26,7 @@
         {
           onClick: this.increment
         },
-        `Count is: ${this.state.count}, double is: ${this.state.double}`
+        `Count is: ${this.state.count}`
       )
     }
   }
