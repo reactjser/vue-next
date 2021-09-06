@@ -9,7 +9,7 @@ function assertCode(code: string) {
       sourceType: 'module',
       plugins: [...babelParserDefaultPlugins, 'typescript']
     })
-  } catch (e) {
+  } catch (e: any) {
     console.log(code)
     throw e
   }
@@ -394,5 +394,13 @@ describe('errors', () => {
     expect(() => transform(`let bar = { foo: $computed(1) }`)).toThrow(
       `$computed can only be used as the initializer`
     )
+  })
+
+  test('not transform the prototype attributes', () => {
+    const { code } = transform(`
+    const hasOwnProperty = Object.prototype.hasOwnProperty
+    const hasOwn = (val, key) => hasOwnProperty.call(val, key)
+    `)
+    expect(code).not.toMatch('.value')
   })
 })

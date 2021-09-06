@@ -119,6 +119,8 @@ export function compileTemplate(
   const preprocessor = preprocessLang
     ? preprocessCustomRequire
       ? preprocessCustomRequire(preprocessLang)
+      : __ESM_BROWSER__
+      ? undefined
       : require('consolidate')[preprocessLang as keyof typeof consolidate]
     : false
   if (preprocessor) {
@@ -127,7 +129,7 @@ export function compileTemplate(
         ...options,
         source: preprocess(options, preprocessor)
       })
-    } catch (e) {
+    } catch (e: any) {
       return {
         code: `export default function render() {}`,
         source: options.source,
