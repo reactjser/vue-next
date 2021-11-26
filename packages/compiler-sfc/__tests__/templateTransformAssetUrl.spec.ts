@@ -29,6 +29,7 @@ describe('compiler sfc: transform asset url', () => {
 			<img src="~fixtures/logo.png"/>
 			<img src="~/fixtures/logo.png"/>
 			<img src="http://example.com/fixtures/logo.png"/>
+			<img src="//example.com/fixtures/logo.png"/>
 			<img src="/fixtures/logo.png"/>
 			<img src="data:image/png;base64,i"/>
 		`)
@@ -41,7 +42,8 @@ describe('compiler sfc: transform asset url', () => {
    */
   test('support uri fragment', () => {
     const result = compileWithAssetUrls(
-      '<use href="~@svg/file.svg#fragment"></use>'
+      '<use href="~@svg/file.svg#fragment"></use>' +
+        '<use href="~@svg/file.svg#fragment"></use>'
     )
 
     expect(result.code).toMatchSnapshot()
@@ -75,7 +77,8 @@ describe('compiler sfc: transform asset url', () => {
     const { code } = compileWithAssetUrls(
       `<img src="./bar.png"/>` +
         `<img src="/bar.png"/>` +
-        `<img src="https://foo.bar/baz.png"/>`,
+        `<img src="https://foo.bar/baz.png"/>` +
+        `<img src="//foo.bar/baz.png"/>`,
       {
         includeAbsolute: true
       }

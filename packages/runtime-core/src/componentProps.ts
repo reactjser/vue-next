@@ -39,6 +39,7 @@ import { createPropsDefaultThis } from './compat/props'
 import { isCompatEnabled, softAssertCompatEnabled } from './compat/compatConfig'
 import { DeprecationTypes } from './compat/compatConfig'
 import { shouldSkipAttr } from './compat/attrsFallthrough'
+import { IfAny } from './helpers/typeUtils'
 
 export type ComponentPropsOptions<P = Data> =
   | ComponentObjectPropsOptions<P>
@@ -109,9 +110,13 @@ type InferPropType<T> = [T] extends [null]
   ? boolean
   : [T] extends [DateConstructor | { type: DateConstructor }]
   ? Date
+  : [T] extends [(infer U)[] | { type: (infer U)[] }]
+  ? U extends DateConstructor
+    ? Date | InferPropType<U>
+    : InferPropType<U>
   : [T] extends [Prop<infer V, infer D>]
   ? unknown extends V
-    ? D
+    ? IfAny<V, V, D>
     : V
   : T
 

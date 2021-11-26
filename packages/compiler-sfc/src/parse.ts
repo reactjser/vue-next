@@ -9,7 +9,6 @@ import {
 import * as CompilerDOM from '@vue/compiler-dom'
 import { RawSourceMap, SourceMapGenerator } from 'source-map'
 import { TemplateCompiler } from './compileTemplate'
-import { Statement } from '@babel/types'
 import { parseCssVars } from './cssVars'
 import { createCache } from './cache'
 
@@ -41,8 +40,14 @@ export interface SFCScriptBlock extends SFCBlock {
   type: 'script'
   setup?: string | boolean
   bindings?: BindingMetadata
-  scriptAst?: Statement[]
-  scriptSetupAst?: Statement[]
+  /**
+   * import('\@babel/types').Statement
+   */
+  scriptAst?: any[]
+  /**
+   * import('\@babel/types').Statement
+   */
+  scriptSetupAst?: any[]
 }
 export interface SFCStyleBlock extends SFCBlock {
   type: 'style'
@@ -399,9 +404,11 @@ function hasSrc(node: ElementNode) {
  * once the empty text nodes (trimmed content) have been filtered out.
  */
 function isEmpty(node: ElementNode) {
-  return (
-    node.children.filter(
-      child => child.type !== NodeTypes.TEXT || child.content.trim() !== ''
-    ).length === 0
-  )
+  for (let i = 0; i < node.children.length; i++) {
+    const child = node.children[i]
+    if (child.type !== NodeTypes.TEXT || child.content.trim() !== '') {
+      return false
+    }
+  }
+  return true
 }
